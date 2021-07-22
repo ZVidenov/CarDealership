@@ -6,7 +6,7 @@ namespace CarDealership
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Ani in the house!");
         }
     }
 }
