@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarDealership.Data
+namespace CarDealership.Data.Models
 {
     public class Salesman
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Car> Cars { get; set; }
-        public ICollection<SalesmenHouses> FinanceHouses {get;set;}
     }
 }

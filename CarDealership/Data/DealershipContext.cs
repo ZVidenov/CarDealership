@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CarDealership.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,19 @@ namespace CarDealership.Data
             optionsBuilder.UseSqlServer(@"Server=.;Database=CarDealershipDB;Trusted_Connection=True;");
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<SalesmenHouses>()
-                .HasKey(bc => new { bc.SalesmanId, bc.FinanceHouseId });
-        }
+       protected override void OnModelCreating(ModelBuilder modelBuilder)
+       {
+            modelBuilder.Entity<CarFeature>()
+            .HasKey(bc => new { bc.CarId, bc.FeatureId });
+       }
+
         //entities
         public DbSet<Car> Cars { get; set; }
-        public DbSet<FinanceHouse> FinanceHouses { get; set; }
         public DbSet<Salesman> Salesmen { get; set; }
-        public DbSet<SalesmenHouses> SalesmenHouses { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<CarFeature> CarFeatures { get; set; }
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<Model> Models { get; set; }
     }
 }
 
