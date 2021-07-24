@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CarDealership.Data.Models
 {
-    public class Feature
+    public class Feature:MainEntity
     {
-        public int Id { get; set; }
+        
         public string Name { get; set; }
         public ICollection<CarFeature> Cars { get; set; }
     }

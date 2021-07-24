@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CarDealership.Data.Models
 {
-    public class Model
+    public class Model:MainEntity
     {
-        public int Id { get; set; }
+        
         public string Name { get; set; }
 
         public ICollection<Car> Cars { get; set; }

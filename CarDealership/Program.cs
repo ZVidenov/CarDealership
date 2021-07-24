@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CarDealership.Business;
+using CarDealership.Presentation;
+using System;
 
 namespace CarDealership
 {
@@ -6,7 +8,11 @@ namespace CarDealership
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Ani in the house!");
+            
+                DealershipBusiness dealershipBusiness = new DealershipBusiness();
+                Display display = new Display(dealershipBusiness);
+                display.Run();
+            
         }
     }
 }
