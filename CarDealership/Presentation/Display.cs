@@ -21,8 +21,8 @@ namespace CarDealership.Presentation
 
         public void ShowMenu()
         {
-            var model = this.dealershipBusiness.GetModelByName("Poredniq");
-            var car = this.dealershipBusiness.GetCarByName("TestowiTest");
+            //var model = this.dealershipBusiness.GetModelByName("NowManyTest");
+            //var car = this.dealershipBusiness.GetCarByName("NowManyTest");
             Console.WriteLine(new string('-', 40));
             Console.WriteLine(new string(' ', 18) + "MENU");
             Console.WriteLine(new string('-', 40));

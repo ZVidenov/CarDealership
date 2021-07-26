@@ -19,7 +19,7 @@ namespace CarDealership.Business
 
             using (database = new DealershipContext())
             {
-                car = this.database.Cars.Include(n => n.Features).FirstOrDefault(x => x.Name == name);
+                car = this.database.Cars.Include(i=>i.Features).ThenInclude(i=>i.Feature).Include(n => n.Model).FirstOrDefault(t => t.Name == name);
 
             }
 
