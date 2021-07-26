@@ -8,6 +8,11 @@ namespace CarDealership.Data.Models
 {
     public class CarFeature
     {
+        public CarFeature(int carId,int featureId)
+        {
+            CarId = carId;
+            FeatureId = featureId;
+        }
         public int CarId { get; set; }
         public Car Car {get;set;}
         public int FeatureId { get; set; }

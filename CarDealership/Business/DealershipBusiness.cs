@@ -19,18 +19,21 @@ namespace CarDealership.Business
 
             using (database = new DealershipContext())
             {
-                car = this.database.Cars.FirstOrDefault(x => x.Name == name);
+                car = this.database.Cars.Include(n => n.Features).FirstOrDefault(x => x.Name == name);
+
             }
 
             return car;
         }
+        
         public Model GetModelByName(string name)
         {
             Model model = null;
-
+            
             using (database = new DealershipContext())
             {
-                model = this.database.Models.FirstOrDefault(x => x.Name == name);
+                model = this.database.Models.Include(n=>n.Cars).FirstOrDefault(x => x.Name == name);
+
             }
 
             return model;
@@ -70,6 +73,7 @@ namespace CarDealership.Business
         {
             using (database = new DealershipContext())
             {
+                model.Id = database.Models.Max(u => u.Id) + 1;
                 this.database.Models.Add(model);
                 this.database.SaveChanges();
             }
@@ -78,6 +82,7 @@ namespace CarDealership.Business
         {
             using (database = new DealershipContext())
             {
+                brand.Id = database.Brands.Max(u => u.Id) + 1;
                 this.database.Brands.Add(brand);
                 this.database.SaveChanges();
             }
@@ -86,9 +91,47 @@ namespace CarDealership.Business
         {
             using (database = new DealershipContext())
             {
+                feature.Id = database.Features.Max(u => u.Id) + 1;
                 this.database.Features.Add(feature);
                 this.database.SaveChanges();
             }
+        }
+        public void CreateCarFeatures(List<Feature>features, Car car)
+        {
+            using (database = new DealershipContext())
+            {
+                //CarFeature feature1 = null;
+                foreach (Feature feature in features)
+                {
+                    database.CarFeatures.Add(new CarFeature(car.Id, feature.Id));
+                    //database.SaveChanges();
+                    //feature1 = this.database.CarFeatures.FirstOrDefault(x => x.CarId == car.Id);
+                    //feature1.Feature = feature;
+                    //feature1.Car = car;
+                    database.SaveChanges();
+                }
+            }
+        }
+        public void AddCarToModel(Model model, Car car)
+        {
+            using (database = new DealershipContext())
+            {
+                model.Cars.Add(car);
+                this.database.SaveChanges();
+            }
+        }
+        public List<Feature> GetCarFeatures(Car car)
+        {
+            List < Feature > features = new List<Feature>();
+            using (database = new DealershipContext())
+            {
+                foreach (CarFeature feature in car.Features)
+                {
+                    features.Add(feature.Feature);
+                }
+                
+            }
+            return features;
         }
     }
 }

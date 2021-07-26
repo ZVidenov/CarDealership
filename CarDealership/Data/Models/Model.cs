@@ -8,7 +8,11 @@ namespace CarDealership.Data.Models
 {
     public class Model:MainEntity
     {
-        
+        public Model(string name)
+        {
+            Name = name;
+            this.Cars = new List<Car>();
+        }
         public string Name { get; set; }
 
         public ICollection<Car> Cars { get; set; }

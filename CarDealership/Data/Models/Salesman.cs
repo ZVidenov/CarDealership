@@ -8,7 +8,7 @@ namespace CarDealership.Data.Models
 {
     public class Salesman:MainEntity
     {
-        public int Id { get; set; }
+        
         public string Name { get; set; }
     }
 }
