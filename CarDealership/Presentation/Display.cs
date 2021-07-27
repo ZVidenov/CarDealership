@@ -30,7 +30,9 @@ namespace CarDealership.Presentation
             Console.WriteLine("1. Find Car");
             Console.WriteLine("2. Add Car");
             Console.WriteLine("3. List Car Features");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("4. Find Brand");
+            Console.WriteLine("5. Exit");
+
         }
         public void Run()
         {
@@ -43,7 +45,7 @@ namespace CarDealership.Presentation
                 switch (command)
                 {
                     case 1:
-                        this.GetByName();
+                        this.GarByName();
                         Console.ReadKey();
                         break;
                     case 2:
@@ -51,6 +53,9 @@ namespace CarDealership.Presentation
                         break;
                     case 3:
                         this.ListFeatures();
+                        break;
+                    case 4:
+                        this.BrandByName();
                         break;
                     default:
                         this.isRunning = false;
@@ -107,7 +112,7 @@ namespace CarDealership.Presentation
             car = this.dealershipBusiness.GetCarByName(car.Name);
             this.dealershipBusiness.CreateCarFeatures(carFeatures, car);
         }
-        private void GetByName()
+        private void GarByName()
         {
             Console.WriteLine("Car name:");
             string name = Console.ReadLine();
@@ -118,7 +123,6 @@ namespace CarDealership.Presentation
         }
         private List<string> EnterFeatures()
         {
-            
             string command = null;
             List<string> features = new List<string>();
             while (command != "done")
@@ -142,6 +146,15 @@ namespace CarDealership.Presentation
             {
                 Console.WriteLine(feature.Name);
             }
+        }
+        private void BrandByName()
+        {
+            Console.WriteLine("Car brand:");
+            string name = Console.ReadLine();
+
+            Brand brand = this.dealershipBusiness.GetBrandByName(name);
+            Console.WriteLine("Currently in stock:");
+            Console.WriteLine(brand.Models);
         }
     }
 }
