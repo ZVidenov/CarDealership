@@ -23,6 +23,7 @@ namespace CarDealership.Presentation
         {
             //var model = this.dealershipBusiness.GetModelByName("NowManyTest");
             //var car = this.dealershipBusiness.GetCarByName("NowManyTest");
+            var brand = this.dealershipBusiness.GetBrandByName("BMW");
             Console.WriteLine(new string('-', 40));
             Console.WriteLine(new string(' ', 18) + "MENU");
             Console.WriteLine(new string('-', 40));
@@ -45,7 +46,7 @@ namespace CarDealership.Presentation
                 switch (command)
                 {
                     case 1:
-                        this.GarByName();
+                        this.CarByName();
                         Console.ReadKey();
                         break;
                     case 2:
@@ -53,9 +54,11 @@ namespace CarDealership.Presentation
                         break;
                     case 3:
                         this.ListFeatures();
+                        Console.ReadKey();
                         break;
                     case 4:
-                        this.BrandByName();
+                        this.ListBrandModels();
+                        Console.ReadKey();
                         break;
                     default:
                         this.isRunning = false;
@@ -75,10 +78,20 @@ namespace CarDealership.Presentation
             string type = Console.ReadLine();
             Console.WriteLine("Car stock:");
             int stock = int.Parse(Console.ReadLine());
-            Console.WriteLine("Car Model:");
+            Console.WriteLine("Car model:");
             string modelName = Console.ReadLine();
-            Console.WriteLine("Car Features (separate with a blank space, write 'done' when ready):");
+            Console.WriteLine("Car brand:");
+            string brandName = Console.ReadLine();
+            
+            Brand brand = this.dealershipBusiness.GetBrandByName(brandName);
+            while (brand == null)
+            {
+                Console.WriteLine("No such brand. Please re-enter the name of the brand:");
+                brandName = Console.ReadLine();
+                brand = this.dealershipBusiness.GetBrandByName(brandName);
+            }
 
+            Console.WriteLine("Car Features (separate with a blank space, write 'done' when ready):");
             List<string> features=EnterFeatures().Distinct().ToList();
             List<Feature> carFeatures = new List<Feature>();
             foreach(string feature in features)
@@ -96,6 +109,7 @@ namespace CarDealership.Presentation
                     carFeatures.Add(feature1);
                 }
             }
+
             
             
             Model model = this.dealershipBusiness.GetModelByName(modelName);
@@ -105,14 +119,16 @@ namespace CarDealership.Presentation
                 this.dealershipBusiness.CreateModel(model);
             }
             model = this.dealershipBusiness.GetModelByName(modelName);
-
+            this.dealershipBusiness.AddModelToBrand(model.Name, brand);
+            
+            model = this.dealershipBusiness.GetModelByName(modelName);
             Car car = new Car(name, price, type, stock);
             car.ModelId = model.Id;
             this.dealershipBusiness.CreateCar(car);
             car = this.dealershipBusiness.GetCarByName(car.Name);
             this.dealershipBusiness.CreateCarFeatures(carFeatures, car);
         }
-        private void GarByName()
+        private void CarByName()
         {
             Console.WriteLine("Car name:");
             string name = Console.ReadLine();
@@ -147,14 +163,16 @@ namespace CarDealership.Presentation
                 Console.WriteLine(feature.Name);
             }
         }
-        private void BrandByName()
+        private void ListBrandModels()
         {
-            Console.WriteLine("Car brand:");
+            Console.WriteLine("Brand name:");
             string name = Console.ReadLine();
-
             Brand brand = this.dealershipBusiness.GetBrandByName(name);
-            Console.WriteLine("Currently in stock:");
-            Console.WriteLine(brand.Models);
+            Console.WriteLine("Models we offer");
+            foreach (Model model in brand.Models)
+            {
+                Console.WriteLine(model.Name);
+            }
         }
     }
 }

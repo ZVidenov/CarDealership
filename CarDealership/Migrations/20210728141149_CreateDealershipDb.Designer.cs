@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarDealership.Migrations
 {
     [DbContext(typeof(DealershipContext))]
-    [Migration("20210724200341_DatabaseReset")]
-    partial class DatabaseReset
+    [Migration("20210728141149_CreateDealershipDb")]
+    partial class CreateDealershipDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,9 +110,7 @@ namespace CarDealership.Migrations
             modelBuilder.Entity("CarDealership.Data.Models.Salesman", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

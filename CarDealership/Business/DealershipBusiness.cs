@@ -32,7 +32,7 @@ namespace CarDealership.Business
             
             using (database = new DealershipContext())
             {
-                model = this.database.Models.Include(n=>n.Cars).FirstOrDefault(x => x.Name == name);
+                model = this.database.Models.Include(n=>n.Cars).Include(n=>n.Brand).FirstOrDefault(x => x.Name == name);
 
             }
 
@@ -44,7 +44,7 @@ namespace CarDealership.Business
 
             using (database = new DealershipContext())
             {
-                brand = this.database.Brands.FirstOrDefault(x => x.Name == name);
+                brand = this.database.Brands.Include(n=>n.Models).FirstOrDefault(x => x.Name == name);
             }
 
             return brand;
@@ -117,6 +117,16 @@ namespace CarDealership.Business
             using (database = new DealershipContext())
             {
                 model.Cars.Add(car);
+                this.database.SaveChanges();
+            }
+        }
+
+        public void AddModelToBrand(string modelName, Brand brand)
+        {
+            using (database = new DealershipContext())
+            {
+                Model model = this.database.Models.FirstOrDefault(x => x.Name == modelName);
+                model.BrandId = brand.Id;
                 this.database.SaveChanges();
             }
         }
