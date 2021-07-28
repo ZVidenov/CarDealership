@@ -10,5 +10,7 @@ namespace CarDealership.Data.Models
     {
         
         public string Name { get; set; }
+        public string Password { get; set; }
+        public double Profits { get; set; }
     }
 }
