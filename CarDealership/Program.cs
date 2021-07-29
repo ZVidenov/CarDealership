@@ -11,7 +11,8 @@ namespace CarDealership
             
                 DealershipBusiness dealershipBusiness = new DealershipBusiness();
                 RegisterLogin registerLogin = new RegisterLogin();
-                Display display = new Display(dealershipBusiness, registerLogin);
+                Sales sales = new Sales();
+                Display display = new Display(dealershipBusiness, registerLogin,sales);
                 display.Run();
             
         }

@@ -9,7 +9,11 @@ namespace CarDealership.Data.Models
 {
     public class Car:MainEntity
     {
-        public Car(string name, int price, string type, int stock)
+        public Car()
+        {
+
+        }
+        public Car(string name, decimal price, string type, int stock)
         {
 
             Name = name;
@@ -20,7 +24,7 @@ namespace CarDealership.Data.Models
 
 
         public string Name { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public string Type { get; set; }
         public int Stock { get; set; }
         public ICollection<CarFeature> Features { get; set; }

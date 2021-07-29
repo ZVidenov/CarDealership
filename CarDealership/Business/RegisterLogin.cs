@@ -11,15 +11,23 @@ namespace CarDealership.Business
     public class RegisterLogin
     {
         private DealershipContext database;
-        public void Register(string name,string password)
+        public bool Register(string name,string password)
         {
             Salesman salesman = new Salesman();
-            salesman.Name = name;
-            salesman.Password = GetStringSha256Hash(password);
+
             using (database = new DealershipContext())
             {
+                salesman = this.database.Salesmen.FirstOrDefault(x => x.Name == name);
+                if (salesman != null)
+                    return false;
+                salesman = new Salesman();
+                salesman.Id = database.Salesmen.Max(u => u.Id) + 1;
+                salesman.Name = name;
+                salesman.Password = GetStringSha256Hash(password);
+                salesman.Profits = 0;
                 this.database.Salesmen.Add(salesman);
                 this.database.SaveChanges();
+                return true;
             }
         }
         public bool LogIn(string name, string password)
@@ -29,9 +37,10 @@ namespace CarDealership.Business
             using (database = new DealershipContext())
             {
                 salesman = this.database.Salesmen.FirstOrDefault(x => x.Name == name);
+                if (salesman == null)
+                    return false;
                 if(salesman.Name==name && salesman.Password == password)
                 {
-                    Console.WriteLine($"Welcome {salesman.Name}");
                     return true;
                 }
                 else

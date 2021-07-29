@@ -12,12 +12,14 @@ namespace CarDealership.Presentation
     {
         private DealershipBusiness dealershipBusiness;
         private RegisterLogin registerLogin;
+        private Sales sales;
         private bool isRunning;
 
-        public Display(DealershipBusiness dealershipBusiness, RegisterLogin registerLogin)
+        public Display(DealershipBusiness dealershipBusiness, RegisterLogin registerLogin, Sales sales)
         {
             this.dealershipBusiness = dealershipBusiness;
             this.registerLogin = registerLogin;
+            this.sales = sales;
             this.isRunning = true;
         }
 
@@ -30,82 +32,144 @@ namespace CarDealership.Presentation
             Console.WriteLine("1. Log In");
             Console.WriteLine("2. Register");
             Console.WriteLine("3. Exit from the program");
-
-            int choice = int.Parse(Console.ReadLine());
-
-            switch (choice)
-            {
-                case 1:
-                    Register();
-                    break;
-                case 2:
-                    LogIn();
-                    break;
-                default:
-                    this.isRunning = false;
-                    break;
-            }
-
-            Console.ReadKey();
-            Console.Clear();
-            ShowMenu();
+            
         }
-        public void ShowMenu()
+        public void ShowAdminMenu()
         {
-            //var model = this.dealershipBusiness.GetModelByName("NowManyTest");
-            //var car = this.dealershipBusiness.GetCarByName("NowManyTest");
-            //var brand = this.dealershipBusiness.GetBrandByName("BMW");
             Console.WriteLine(new string('-', 40));
-            Console.WriteLine(new string(' ', 18) + "MENU");
+            Console.WriteLine(new string(' ', 18) + "ADMIN MENU");
             Console.WriteLine(new string('-', 40));
 
-            Console.WriteLine("1. Find Car");
+            Console.WriteLine("1. Check stock of a specific car");
             Console.WriteLine("2. Add Car");
             Console.WriteLine("3. List Car Features");
-            Console.WriteLine("4. Find Brand");
+            Console.WriteLine("4. List Brand Models");
             Console.WriteLine("5. Exit");
+
+        }
+
+        public void ShowSalesmanMenu()
+        {
+            Console.WriteLine(new string('-', 40));
+            Console.WriteLine(new string(' ', 18) + "EMPLOYEE MENU");
+            Console.WriteLine(new string('-', 40));
+
+            Console.WriteLine("1. Check stock of a specific car");
+            Console.WriteLine("2. List Car Features");
+            Console.WriteLine("3. List Brand Models");
+            Console.WriteLine("4. List Model Cars");
+            Console.WriteLine("5. Sell Car");
+            Console.WriteLine("6. Exit");
 
         }
         public void Run()
         {
+            Salesman salesman = null;
             while (isRunning)
             {
-                LogInMenu();
-
-                int command = int.Parse(Console.ReadLine());
-
-                switch (command)
+                while (salesman == null)
                 {
-                    case 1:
-                        this.CarByName();
-                        Console.ReadKey();
-                        break;
-                    case 2:
-                        this.CreateCar();
-                        break;
-                    case 3:
-                        this.ListFeatures();
-                        Console.ReadKey();
-                        break;
-                    case 4:
-                        this.ListBrandModels();
-                        Console.ReadKey();
-                        break;
-                    default:
-                        this.isRunning = false;
-                        break;
-                }
+                    LogInMenu();
+                    int choice = int.Parse(Console.ReadLine());
 
-                Console.Clear();
+                    switch (choice)
+                    {
+                        case 1:
+                            salesman = LogIn();
+                            break;
+                        case 2:
+                            Register();
+                            break;
+                        default:
+                            this.isRunning = false;
+                            return;
+                    }
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                if (salesman.Name == "Admin")
+                {
+                    ShowAdminMenu();
+
+                    int command = int.Parse(Console.ReadLine());
+
+                    switch (command)
+                    {
+                        case 1:
+                            this.CarByName();
+                            Console.ReadKey();
+                            break;
+                        case 2:
+                            this.CreateCar();
+                            break;
+                        case 3:
+                            this.ListFeatures();
+                            Console.ReadKey();
+                            break;
+                        case 4:
+                            this.ListBrandModels();
+                            Console.ReadKey();
+                            break;
+                        default:
+                            this.isRunning = false;
+                            break;
+                    }
+
+                    Console.Clear();
+                }
+                else
+                {
+                    ShowSalesmanMenu();
+
+                    int command = int.Parse(Console.ReadLine());
+
+                    switch (command)
+                    {
+                        case 1:
+                            this.CarByName();
+                            Console.ReadKey();
+                            break;
+                        case 2:
+                            this.ListFeatures();
+                            break;
+                        case 3:
+                            this.ListBrandModels();
+                            Console.ReadKey();
+                            break;
+                        case 4:
+                            this.ListModelCars();
+                            Console.ReadKey();
+                            break;
+                        case 5:
+                            this.SellCar(salesman.Name);
+                            Console.ReadKey();
+                            break;
+                        default:
+                            this.isRunning = false;
+                            break;
+                    }
+
+                    Console.Clear();
+
+                }
             }
         }
-
+        private void SellCar(string salesmanName)
+        {
+            Console.WriteLine("Car name:");
+            string carName = Console.ReadLine();
+            Console.WriteLine("Sold amount");
+            int amount = int.Parse(Console.ReadLine());
+            Car car = this.dealershipBusiness.GetCarByName(carName);
+            this.sales.Sale(salesmanName,carName,amount);
+            Console.WriteLine("Sale complete.");
+        }
         private void CreateCar()
         {
             Console.WriteLine("Car name:");
             string name = Console.ReadLine();
             Console.WriteLine("Car price:");
-            int price = int.Parse(Console.ReadLine());
+            decimal price = int.Parse(Console.ReadLine());
             Console.WriteLine("Car type:");
             string type = Console.ReadLine();
             Console.WriteLine("Car stock:");
@@ -123,7 +187,7 @@ namespace CarDealership.Presentation
                 brand = this.dealershipBusiness.GetBrandByName(brandName);
             }
 
-            Console.WriteLine("Car Features (separate with a blank space, write 'done' when ready):");
+            Console.WriteLine("Car Features (write 'done' when ready):");
             List<string> features=EnterFeatures().Distinct().ToList();
             List<Feature> carFeatures = new List<Feature>();
             foreach(string feature in features)
@@ -166,8 +230,7 @@ namespace CarDealership.Presentation
             string name = Console.ReadLine();
 
             Car car = this.dealershipBusiness.GetCarByName(name);
-            Console.WriteLine("Currently in stock:");
-            Console.WriteLine(car.Stock);
+            Console.WriteLine($"Currently in stock: {car.Stock} .");
         }
         private List<string> EnterFeatures()
         {
@@ -206,6 +269,17 @@ namespace CarDealership.Presentation
                 Console.WriteLine(model.Name);
             }
         }
+        private void ListModelCars()
+        {
+            Console.WriteLine("Model name:");
+            string name = Console.ReadLine();
+            Model model = this.dealershipBusiness.GetModelByName(name);
+            Console.WriteLine("Cars we offer:");
+            foreach (Car car in model.Cars)
+            {
+                Console.WriteLine(car.Name);
+            }
+        }
 
         private void Register()
         {
@@ -213,15 +287,33 @@ namespace CarDealership.Presentation
             string name = Console.ReadLine();
             Console.WriteLine("Your password");
             string password = Console.ReadLine();
-            registerLogin.Register(name, password);
+            if(registerLogin.Register(name, password))
+            {
+                Console.WriteLine("Success");
+            }
+            else
+            {
+                Console.WriteLine("User already exists");
+            }
         }
-        private void LogIn()
+        private Salesman LogIn()
         {
             Console.WriteLine("Your name:");
             string name = Console.ReadLine();
             Console.WriteLine("Your password");
             string password = Console.ReadLine();
-            registerLogin.LogIn(name, password);
+            Salesman salesman = null;
+            if(registerLogin.LogIn(name, password))
+            {
+                salesman = this.dealershipBusiness.GetSalesmanByName(name);
+                Console.WriteLine($"Login successful! Welcome, {salesman.Name}.");
+                return salesman;
+            }
+            else
+            {
+                Console.WriteLine("Wrong username or password.");
+                return salesman;
+            }
         }
     }
 }

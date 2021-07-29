@@ -25,7 +25,19 @@ namespace CarDealership.Business
 
             return car;
         }
-        
+        public Salesman GetSalesmanByName(string name)
+        {
+            Salesman salesman = null;
+
+            using (database = new DealershipContext())
+            {
+                salesman = this.database.Salesmen.FirstOrDefault(t => t.Name == name);
+
+            }
+
+            return salesman;
+        }
+
         public Model GetModelByName(string name)
         {
             Model model = null;
@@ -100,27 +112,13 @@ namespace CarDealership.Business
         {
             using (database = new DealershipContext())
             {
-                //CarFeature feature1 = null;
                 foreach (Feature feature in features)
                 {
                     database.CarFeatures.Add(new CarFeature(car.Id, feature.Id));
-                    //database.SaveChanges();
-                    //feature1 = this.database.CarFeatures.FirstOrDefault(x => x.CarId == car.Id);
-                    //feature1.Feature = feature;
-                    //feature1.Car = car;
                     database.SaveChanges();
                 }
             }
         }
-        public void AddCarToModel(Model model, Car car)
-        {
-            using (database = new DealershipContext())
-            {
-                model.Cars.Add(car);
-                this.database.SaveChanges();
-            }
-        }
-
         public void AddModelToBrand(string modelName, Brand brand)
         {
             using (database = new DealershipContext())
