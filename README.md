@@ -7,7 +7,8 @@
 </strong>
 <br><br><br>
 
-1. Clone the progect <b>or</b> download the <b>Zip file</b>
+1. Clone the progect <b>or</b> download the [Zip file](https://github.com/ZVidenov/CarDealership/files/6903555/CarDealership-master.zip)
 2. Open the Package Manager Console
 3. Write  the command <b>update-database -verbose</b>
 4. Start the project and try it
+
