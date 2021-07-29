@@ -13,6 +13,17 @@ namespace CarDealership.Business
     {
         private DealershipContext database;
 
+        public List<Salesman> GetAllSalesmen()
+        {
+            List<Salesman> salesmen = null;
+
+            using (database = new DealershipContext())
+            {
+                salesmen = this.database.Salesmen.ToList();
+            }
+
+            return salesmen;
+        }
         public Car GetCarByName(string name)
         {
             Car car = null;

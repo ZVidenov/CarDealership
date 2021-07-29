@@ -37,21 +37,22 @@ namespace CarDealership.Presentation
         public void ShowAdminMenu()
         {
             Console.WriteLine(new string('-', 40));
-            Console.WriteLine(new string(' ', 18) + "ADMIN MENU");
+            Console.WriteLine(new string(' ', 15) + "ADMIN MENU");
             Console.WriteLine(new string('-', 40));
 
             Console.WriteLine("1. Check stock of a specific car");
             Console.WriteLine("2. Add Car");
             Console.WriteLine("3. List Car Features");
             Console.WriteLine("4. List Brand Models");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("5. List Employees and their Earnings");
+            Console.WriteLine("6. Exit");
 
         }
 
         public void ShowSalesmanMenu()
         {
             Console.WriteLine(new string('-', 40));
-            Console.WriteLine(new string(' ', 18) + "EMPLOYEE MENU");
+            Console.WriteLine(new string(' ', 13) + "EMPLOYEE MENU");
             Console.WriteLine(new string('-', 40));
 
             Console.WriteLine("1. Check stock of a specific car");
@@ -110,6 +111,10 @@ namespace CarDealership.Presentation
                             this.ListBrandModels();
                             Console.ReadKey();
                             break;
+                        case 5:
+                            this.ListEmployeeEarnings();
+                            Console.ReadKey();
+                            break;
                         default:
                             this.isRunning = false;
                             break;
@@ -131,6 +136,7 @@ namespace CarDealership.Presentation
                             break;
                         case 2:
                             this.ListFeatures();
+                            Console.ReadKey();
                             break;
                         case 3:
                             this.ListBrandModels();
@@ -161,8 +167,15 @@ namespace CarDealership.Presentation
             Console.WriteLine("Sold amount");
             int amount = int.Parse(Console.ReadLine());
             Car car = this.dealershipBusiness.GetCarByName(carName);
-            this.sales.Sale(salesmanName,carName,amount);
-            Console.WriteLine("Sale complete.");
+            if (amount > car.Stock)
+            {
+                Console.WriteLine("Not enough cars in stock!");
+            }
+            else
+            {
+                this.sales.Sale(salesmanName, carName, amount);
+                Console.WriteLine("Sale complete.");
+            }
         }
         private void CreateCar()
         {
@@ -263,10 +276,20 @@ namespace CarDealership.Presentation
             Console.WriteLine("Brand name:");
             string name = Console.ReadLine();
             Brand brand = this.dealershipBusiness.GetBrandByName(name);
-            Console.WriteLine("Models we offer");
+            Console.WriteLine("Models we offer:");
             foreach (Model model in brand.Models)
             {
                 Console.WriteLine(model.Name);
+            }
+        }
+
+        private void ListEmployeeEarnings()
+        {
+            List<Salesman> salesmen = this.dealershipBusiness.GetAllSalesmen();
+            foreach (Salesman salesman in salesmen)
+            {
+                if(salesman.Name!="Admin")
+                Console.WriteLine($"{salesman.Name} has earned us: {salesman.Profits}$.");
             }
         }
         private void ListModelCars()
@@ -285,7 +308,7 @@ namespace CarDealership.Presentation
         {
             Console.WriteLine("Your name:");
             string name = Console.ReadLine();
-            Console.WriteLine("Your password");
+            Console.WriteLine("Your password:");
             string password = Console.ReadLine();
             if(registerLogin.Register(name, password))
             {
