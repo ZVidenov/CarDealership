@@ -10,7 +10,8 @@ namespace CarDealership
         {
             
                 DealershipBusiness dealershipBusiness = new DealershipBusiness();
-                Display display = new Display(dealershipBusiness);
+                RegisterLogin registerLogin = new RegisterLogin();
+                Display display = new Display(dealershipBusiness, registerLogin);
                 display.Run();
             
         }

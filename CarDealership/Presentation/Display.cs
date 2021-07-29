@@ -11,19 +11,50 @@ namespace CarDealership.Presentation
     public class Display
     {
         private DealershipBusiness dealershipBusiness;
+        private RegisterLogin registerLogin;
         private bool isRunning;
 
-        public Display(DealershipBusiness dealershipBusiness)
+        public Display(DealershipBusiness dealershipBusiness, RegisterLogin registerLogin)
         {
             this.dealershipBusiness = dealershipBusiness;
+            this.registerLogin = registerLogin;
             this.isRunning = true;
         }
 
+        public void LogInMenu()
+        {
+            Console.WriteLine(new string('-', 40));
+            Console.WriteLine(new string(' ', 8) + "Welcome! Please log in...");
+            Console.WriteLine(new string('-', 40));
+
+            Console.WriteLine("1. Log In");
+            Console.WriteLine("2. Register");
+            Console.WriteLine("3. Exit from the program");
+
+            int choice = int.Parse(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Register();
+                    break;
+                case 2:
+                    LogIn();
+                    break;
+                default:
+                    this.isRunning = false;
+                    break;
+            }
+
+            Console.ReadKey();
+            Console.Clear();
+            ShowMenu();
+        }
         public void ShowMenu()
         {
             //var model = this.dealershipBusiness.GetModelByName("NowManyTest");
             //var car = this.dealershipBusiness.GetCarByName("NowManyTest");
-            var brand = this.dealershipBusiness.GetBrandByName("BMW");
+            //var brand = this.dealershipBusiness.GetBrandByName("BMW");
             Console.WriteLine(new string('-', 40));
             Console.WriteLine(new string(' ', 18) + "MENU");
             Console.WriteLine(new string('-', 40));
@@ -39,7 +70,7 @@ namespace CarDealership.Presentation
         {
             while (isRunning)
             {
-                ShowMenu();
+                LogInMenu();
 
                 int command = int.Parse(Console.ReadLine());
 
@@ -68,6 +99,7 @@ namespace CarDealership.Presentation
                 Console.Clear();
             }
         }
+
         private void CreateCar()
         {
             Console.WriteLine("Car name:");
@@ -173,6 +205,23 @@ namespace CarDealership.Presentation
             {
                 Console.WriteLine(model.Name);
             }
+        }
+
+        private void Register()
+        {
+            Console.WriteLine("Your name:");
+            string name = Console.ReadLine();
+            Console.WriteLine("Your password");
+            string password = Console.ReadLine();
+            registerLogin.Register(name, password);
+        }
+        private void LogIn()
+        {
+            Console.WriteLine("Your name:");
+            string name = Console.ReadLine();
+            Console.WriteLine("Your password");
+            string password = Console.ReadLine();
+            registerLogin.LogIn(name, password);
         }
     }
 }

@@ -31,6 +31,7 @@ namespace CarDealership.Business
                 salesman = this.database.Salesmen.FirstOrDefault(x => x.Name == name);
                 if(salesman.Name==name && salesman.Password == password)
                 {
+                    Console.WriteLine($"Welcome {salesman.Name}");
                     return true;
                 }
                 else
