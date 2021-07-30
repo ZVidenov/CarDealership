@@ -44,8 +44,9 @@ namespace CarDealership.Presentation
             Console.WriteLine("2. Add Car");
             Console.WriteLine("3. List Car Features");
             Console.WriteLine("4. List Brand Models");
-            Console.WriteLine("5. List Employees and their Earnings");
-            Console.WriteLine("6. Exit");
+            Console.WriteLine("5. List Model Cars");
+            Console.WriteLine("6. List Employees and their Earnings");
+            Console.WriteLine("7. Exit");
 
         }
 
@@ -112,6 +113,10 @@ namespace CarDealership.Presentation
                             Console.ReadKey();
                             break;
                         case 5:
+                            this.ListModelCars();
+                            Console.ReadKey();
+                            break;
+                        case 6:
                             this.ListEmployeeEarnings();
                             Console.ReadKey();
                             break;
@@ -164,25 +169,34 @@ namespace CarDealership.Presentation
         {
             Console.WriteLine("Car name:");
             string carName = Console.ReadLine();
-            Console.WriteLine("Sold amount");
-            int amount = int.Parse(Console.ReadLine());
             Car car = this.dealershipBusiness.GetCarByName(carName);
-            if (amount > car.Stock)
+            if (car == null)
             {
-                Console.WriteLine("Not enough cars in stock!");
+                Console.WriteLine("We don't offer this car. Please doublecheck the name.");
+
             }
             else
             {
-                this.sales.Sale(salesmanName, carName, amount);
-                Console.WriteLine("Sale complete.");
-            }
+                Console.WriteLine("Sold amount");
+            int amount = int.Parse(Console.ReadLine());
+                      
+                if (amount > car.Stock)
+                {
+                    Console.WriteLine("Not enough cars in stock!");
+                }
+                else
+                {
+                    this.sales.Sale(salesmanName, carName, amount);
+                    Console.WriteLine("Sale complete.");
+                }
+            }            
         }
         private void CreateCar()
         {
             Console.WriteLine("Car name:");
             string name = Console.ReadLine();
             Console.WriteLine("Car price:");
-            decimal price = int.Parse(Console.ReadLine());
+            decimal price = decimal.Parse(Console.ReadLine());
             Console.WriteLine("Car type:");
             string type = Console.ReadLine();
             Console.WriteLine("Car stock:");
@@ -243,7 +257,15 @@ namespace CarDealership.Presentation
             string name = Console.ReadLine();
 
             Car car = this.dealershipBusiness.GetCarByName(name);
-            Console.WriteLine($"Currently in stock: {car.Stock} .");
+            if (car != null)
+            {
+                Console.WriteLine($"Currently in stock: {car.Stock} .");
+            }
+            else
+            {
+                Console.WriteLine("We don't offer this car. Please doublecheck the name.");
+                return;
+            }
         }
         private List<string> EnterFeatures()
         {
@@ -265,6 +287,11 @@ namespace CarDealership.Presentation
             Console.WriteLine("Car name:");
             string name = Console.ReadLine();
             Car car = this.dealershipBusiness.GetCarByName(name);
+            if (car == null)
+            {
+                Console.WriteLine("We don't offer this car. Please doublecheck the name.");
+                return;
+            }
             List<Feature> features=this.dealershipBusiness.GetCarFeatures(car);
             foreach(Feature feature in features)
             {
@@ -276,6 +303,11 @@ namespace CarDealership.Presentation
             Console.WriteLine("Brand name:");
             string name = Console.ReadLine();
             Brand brand = this.dealershipBusiness.GetBrandByName(name);
+            if (brand == null)
+            {
+                Console.WriteLine("We don't offer any models from this brand. Please doublecheck the name.");
+                return;
+            }
             Console.WriteLine("Models we offer:");
             foreach (Model model in brand.Models)
             {
@@ -297,6 +329,11 @@ namespace CarDealership.Presentation
             Console.WriteLine("Model name:");
             string name = Console.ReadLine();
             Model model = this.dealershipBusiness.GetModelByName(name);
+            if (model == null)
+            {
+                Console.WriteLine("We don't offer any cars from this model. Please doublecheck the name.");
+                return;
+            }
             Console.WriteLine("Cars we offer:");
             foreach (Car car in model.Cars)
             {
